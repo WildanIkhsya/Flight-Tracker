@@ -1,6 +1,5 @@
 const express = require("express");
-const conn = require("../config/conn.js");
-const db = require("../config/conn.js");
+const conn = require("../config/conn");
 const app = express();
 
 app.use(express.json());
@@ -9,9 +8,50 @@ app.listen(8000, () => {
     console.log("running on port 8000")
 });
 
+app.use(express.urlencoded({ extended: true}));
+const Login = require("../models/user");
+
+app.post('/login', async (req, resp) => {
+try {
+    const { username, password, login_time, logout_time, role, created_at, updated_at } = req.body;
+
+
+
+    // let query = "insert into t_user values (NULL,?,?,?,?,?,?,?)";
+    // let values = [username, password, login_time, logout_time, role, created_at, updated_at];
+
+//     conn.query(query, values, async (err, result, fields) =>
+//     {
+//         if (err)
+//         {
+//             return resp.status(403).send(
+//                 {
+//                     status: "error",
+//                     message: err.message,
+//                 }
+//             );
+//         }
+        const Loginuser = new Login({
+            username, 
+            password, 
+            login_time, 
+            logout_time, 
+            role, 
+            created_at, 
+            updated_at
+        })
+
+        await Loginuser.save();
+
+        resp.json(Loginuser);
+    } catch (err){
+        console.error(err.message);
+    }
+});
+
 app.get('/profil/:id', (req, resp) => {
     let query = "SELECT * FROM t_user";
-    byid=req.params.id;
+
     conn.query(query,(err, result, fields) => {
         if (err) {
             return resp.status(500).send({
@@ -21,16 +61,7 @@ app.get('/profil/:id', (req, resp) => {
         }
         return resp.json({
             status: "success",
-            Data: 
-            {
-                user_id:result[0].user_id,
-                username: result[0].username,
-                login_time: result[0].login_time,
-                logout_time: result[0].logout_time,
-                role: result[0].role,
-                created_at: result[0].created_at,
-                updated_at: result[0].updated_at,
-            },
+            Data: result,
         });
     });
 });

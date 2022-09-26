@@ -1,12 +1,13 @@
 const sequelize = require("sequelize");
 
-const conn = new sequelize('mysql://devops:D3v0p5@Pr0@194.233.73.153:6606/protoft')
+// const conn = new sequelize('mysql://devops:D3v0p5@Pr0@194.233.73.153:6606/protoft')
 
-// const conn = new sequelize("protoft", "devops", "D3v0p5@Pr0", {
-//     host     : "194.233.73.153",
-//     dialect  : "mysql",
-//     port:6606,
-// });
+const conn = new sequelize("protoft", "devops", "D3v0p5@Pr0", {
+    host     : "194.233.73.153",
+    dialect  : "mysql",
+    port:6606,
+    timezone: '+07:00'
+});
 
 // const conn = new sequelize({
 //     host     : '194.233.73.153',
